@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tu Taller Móvil</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#14161A">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --azul:#0B4DA2; --azul-2:#E7EEF9; --rojo:#D7263D; --rojo-2:#FBE8EB;
+  --gris:#5B6270; --gris-2:#D9DDE3; --negro:#14161A; --fondo:#F2F4F7; --card:#FFFFFF;
+  --verde:#1E8E5A; --verde-2:#E4F4EC; --ambar:#B7791F; --ambar-2:#FBF1DE;
+  --radio:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fondo);color:var(--negro);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--azul);text-decoration:none}
+header#top{position:sticky;top:0;z-index:10;background:var(--negro);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--azul);box-shadow:0 2px 0 var(--rojo)}
+header#top .back{color:#fff;font-size:22px;line-height:1;padding:4px 8px 4px 0;background:none;border:0;cursor:pointer}
+header#top h1{font-size:17px;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header#top .brand{font-weight:800;letter-spacing:.04em}
+header#top .act{color:#fff;background:none;border:0;font-size:20px;cursor:pointer;padding:4px}
+main{max-width:760px;margin:0 auto;padding:14px 16px 150px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gris-2);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:8}
+.nav a{flex:1;text-align:center;padding:7px 0 9px;font-size:12px;color:var(--gris);font-weight:600}
+.nav a span{display:block;font-size:19px;line-height:1.2}
+.nav a.on{color:var(--azul)}
+.k-repuesto{background:var(--rojo-2);color:var(--rojo)} .k-insumo{background:var(--fondo);color:var(--gris)}
+.k-herramienta{background:var(--azul-2);color:var(--azul)} .k-otro{background:var(--ambar-2);color:var(--ambar)}
+.card{background:var(--card);border-radius:var(--radio);padding:14px;margin:0 0 12px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.list .item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--radio);margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,.05);color:inherit}
+.item .grow{flex:1;min-width:0}
+.item .t{font-weight:600}
+.item .s{color:var(--gris);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .r{text-align:right;font-size:13px;white-space:nowrap}
+.muted{color:var(--gris)} .small{font-size:13px}
+h2{font-size:15px;margin:18px 2px 8px;color:var(--gris);text-transform:uppercase;letter-spacing:.05em}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1 1 140px}
+label{display:block;font-size:12px;color:var(--gris);margin:10px 0 4px;font-weight:600}
+input,select,textarea{width:100%;font:inherit;padding:10px 11px;border:1px solid var(--gris-2);border-radius:10px;background:#fff;color:var(--negro)}
+textarea{min-height:70px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--azul);border-color:transparent}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:inherit;font-weight:600;padding:11px 16px;border-radius:10px;border:0;cursor:pointer;background:var(--azul);color:#fff}
+.btn.sec{background:var(--azul-2);color:var(--azul)}
+.btn.red{background:var(--rojo);color:#fff}
+.btn.ghost{background:transparent;color:var(--rojo);border:1px solid var(--rojo-2)}
+.btn.wa{background:#1FA855}
+.btn:disabled{opacity:.6}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btns .btn{flex:1 1 auto}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+.e-presupuesto{background:var(--ambar-2);color:var(--ambar)}
+.e-aprobado{background:var(--azul-2);color:var(--azul)}
+.e-realizado{background:var(--rojo-2);color:var(--rojo)}
+.e-cobrado{background:var(--verde-2);color:var(--verde)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--card);border-radius:var(--radio);padding:10px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.stat .k{font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:.04em}
+.stat .v{font-weight:800;font-size:16px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg{display:flex;background:var(--fondo);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;padding:8px 4px;border-radius:8px;font:inherit;font-size:13px;font-weight:600;color:var(--gris);cursor:pointer}
+.seg button.on{background:#fff;color:var(--negro);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.it{border:1px solid var(--gris-2);border-radius:10px;padding:10px;margin-bottom:8px;position:relative}
+.it.mo{border-left:4px solid var(--azul)} .it.rep{border-left:4px solid var(--rojo)} .it.ins{border-left:4px solid var(--gris)}
+.it .x{position:absolute;top:6px;right:6px;border:0;background:none;color:var(--gris);font-size:20px;cursor:pointer;line-height:1}
+.it .g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.it label{margin:6px 0 2px}
+.it .sub{text-align:right;font-size:13px;color:var(--gris);margin-top:6px}
+.tot{display:flex;justify-content:space-between;padding:4px 0}
+.tot.big{font-size:19px;font-weight:800;border-top:2px solid var(--negro);margin-top:6px;padding-top:8px}
+.interno{background:var(--ambar-2);border-radius:10px;padding:10px;margin-top:10px;font-size:13px}
+.fab{position:fixed;right:16px;bottom:calc(74px + env(safe-area-inset-bottom));z-index:9;border-radius:99px;padding:14px 20px;box-shadow:0 4px 12px rgba(11,77,162,.35)}
+#toast{position:fixed;left:50%;bottom:140px;transform:translateX(-50%);background:var(--negro);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;max-width:90vw}
+#toast.on{opacity:1}
+.err{background:var(--rojo-2);color:var(--rojo);padding:10px;border-radius:10px;margin:10px 0;font-size:14px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
+.kv dt{color:var(--gris)} .kv dd{margin:0}
+.login{max-width:360px;margin:8vh auto 0}
+.login .logo{text-align:center;margin-bottom:18px}
+.login .logo b{display:block;font-size:24px;letter-spacing:.05em}
+details.tr{background:var(--card);border-radius:var(--radio);margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+details.tr summary{list-style:none;padding:12px 14px;cursor:pointer;display:flex;gap:10px;align-items:center}
+details.tr summary::-webkit-details-marker{display:none}
+details.tr .body{padding:0 14px 14px}
+table.mini{width:100%;border-collapse:collapse;font-size:13px}
+table.mini td{padding:5px 0;border-bottom:1px solid var(--fondo)}
+table.mini td.n{text-align:right;white-space:nowrap;padding-left:8px}
+.empty{text-align:center;color:var(--gris);padding:24px 8px}
+.linkbox{font-size:12px;word-break:break-all;background:var(--fondo);padding:8px;border-radius:8px;margin-top:6px}
+@media (max-width:420px){.stat .v{font-size:14px}}
+</style>
+</head>
+<body>
+<header id="top"><h1 class="brand">TU TALLER MÓVIL</h1></header>
+<main id="app"><div class="empty">Cargando…</div></main>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+'use strict';
+// ===== Config =====
+const SB_URL = 'https://hizmowdizarryobqdmya.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhpem1vd2RpemFycnlvYnFkbXlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MTA3NzIsImV4cCI6MjA5MzM4Njc3Mn0.avGU7Jp4GKvagEUqORnKhnSFEP-c8KrIIo4_i3cpZMU';
+const sb = supabase.createClient(SB_URL, SB_KEY, { auth: { storageKey: 'tm-auth' } });
+
+const ESTADOS = { presupuesto: 'Presupuesto', aprobado: 'Aprobado', realizado: 'Realizado', cobrado: 'Cobrado' };
+const TIPOS = { mano_obra: 'Mano de obra', repuesto: 'Repuesto', insumo: 'Insumo' };
+const CATS = { repuesto: 'Repuesto', insumo: 'Insumo', herramienta: 'Herramienta', otro: 'Otro' };
+const MEDIOS = { efectivo: 'Efectivo', transferencia: 'Transferencia', mercado_pago: 'Mercado Pago', tarjeta: 'Tarjeta', otro: 'Otro' };
+const SERVICIOS = ['Cambio de aceite y filtro', 'Cambio de aceite, filtro de aceite y filtro de aire', 'Limpieza de inyectores', 'Service de inyección completo', 'Cambio de pastillas de freno delanteras', 'Cambio de pastillas de freno traseras', 'Cambio de bujías', 'Diagnóstico'];
+let CFG = { negocio: 'Tu Taller Móvil', telefono: '', garantia: '', pie: 'Documento no válido como factura.' };
+let ADMIN_OK = false;
+
+// ===== Helpers =====
+const $ = s => document.querySelector(s);
+const app = () => $('#app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const n = v => { const x = Number(v); return isFinite(x) ? x : 0; };
+const money = v => '$ ' + n(v).toLocaleString('es-AR', { maximumFractionDigits: 2 });
+const kmf = v => v == null || v === '' ? '' : n(v).toLocaleString('es-AR') + ' km';
+const fecha = s => { if (!s) return ''; const [y, m, d] = String(s).slice(0, 10).split('-'); return `${d}/${m}/${y}`; };
+const hoy = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+const pad = (v, l = 4) => String(v ?? '').padStart(l, '0');
+const vehTxt = v => [v?.marca, v?.modelo, v?.anio].filter(Boolean).join(' ') || 'Vehículo';
+const chip = e => `<span class="chip e-${esc(e)}">${esc(ESTADOS[e] || e)}</span>`;
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), 2200); }
+function fail(e) { console.error(e); toast('Error: ' + (e?.message || e)); }
+function chk({ data, error }) { if (error) throw error; return data; }
+function go(h) { if (location.hash === h) route(); else location.hash = h; }
+function newToken() { return (crypto.randomUUID() + crypto.randomUUID()).replace(/-/g, ''); }
+function portalUrl(token) { return location.origin + location.pathname + '?p=' + token; }
+function waPhone(tel) {
+  let d = String(tel || '').replace(/\D/g, '');
+  if (!d) return '';
+  if (d.startsWith('54')) return d;
+  if (d.startsWith('0')) d = d.slice(1);
+  if (d.length === 12 && d.slice(2, 4) === '15') d = d.slice(0, 2) + d.slice(4);      // 11 15 xxxx xxxx
+  else if (d.length === 12 && d.slice(3, 5) === '15') d = d.slice(0, 3) + d.slice(5); // 221 15 xxx xxxx
+  return '549' + d;
+}
+function totales(t) {
+  let mo = 0, rep = 0, costo = 0;
+  for (const i of t.items || []) {
+    const s = n(i.cantidad) * n(i.precio_unit);
+    if (i.tipo === 'mano_obra') mo += s; else rep += s;
+    costo += n(i.cantidad) * n(i.costo_unit);
+  }
+  const sub = mo + rep, desc = n(t.descuento), total = sub - desc;
+  return { mo, rep, sub, desc, total, costo, margen: total - costo };
+}
+const GEAR = `<button class="act" aria-label="Configuración" onclick="go('#/cfg')">⚙</button>`;
+function nav(active) {
+  const t = [['#/', 'Clientes', '👤'], ['#/k', 'Compras', '🧾'], ['#/p', 'Proveedores', '🏪']];
+  return `<nav class="nav">${t.map(([h, l, i]) => `<a href="${h}" class="${active === h ? 'on' : ''}"><span>${i}</span>${l}</a>`).join('')}</nav>`;
+}
+const totCompra = k => (k.tm_compra_items || k.items || []).reduce((s, i) => s + n(i.cantidad) * n(i.costo_unit), 0);
+function setHeader(title, back, extra = '') {
+  $('#top').innerHTML = (back != null ? `<button class="back" aria-label="Volver" onclick="go('${back}')">‹</button>` : '') +
+    `<h1 class="${back == null ? 'brand' : ''}">${esc(title)}</h1>` + extra;
+}
+
+// ===== Router =====
+async function route() {
+  try {
+    const p = new URLSearchParams(location.search).get('p');
+    if (p) return await viewPortal(p);
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return viewLogin();
+    if (!ADMIN_OK) {
+      const { data } = await sb.from('tm_admins').select('user_id').eq('user_id', session.user.id).maybeSingle();
+      if (!data) return viewNoAccess(session);
+      ADMIN_OK = true;
+      const c = await sb.from('tm_config').select('*').eq('id', 1).maybeSingle();
+      if (c.data) CFG = c.data;
+    }
+    const [, a, b] = (location.hash.slice(1) || '/').split('/');
+    window.scrollTo(0, 0);
+    switch (a) {
+      case undefined: case '': return await viewHome();
+      case 'cn': return viewClienteForm();
+      case 'ce': return await viewClienteForm(b);
+      case 'c': return await viewCliente(b);
+      case 'vn': return viewVehiculoForm(b);
+      case 've': return await viewVehiculoForm(null, b);
+      case 'v': return await viewVehiculo(b);
+      case 'tn': return await viewTrabajo(null, b);
+      case 't': return await viewTrabajo(b);
+      case 'cfg': return viewConfig();
+      case 'k': return b ? await viewCompra(b) : await viewCompras();
+      case 'kn': return await viewCompra(null, b);
+      case 'p': return b ? await viewProveedor(b) : await viewProveedores();
+      case 'pn': return viewProveedorForm();
+      case 'pe': return await viewProveedorForm(b);
+      default: return go('#/');
+    }
+  } catch (e) { fail(e); app().innerHTML = `<div class="err">${esc(e.message || e)}</div><div class="btns"><button class="btn sec" onclick="go('#/')">Volver al inicio</button></div>`; }
+}
+window.addEventListener('hashchange', route);
+
+// ===== Login =====
+function viewLogin() {
+  setHeader('TU TALLER MÓVIL');
+  app().innerHTML = `
+  <div class="login card">
+    <div class="logo"><b>TU TALLER MÓVIL</b><span class="muted small">Gestión de clientes y trabajos</span></div>
+    <form id="f">
+      <label>Email</label><input name="email" type="email" autocomplete="username" required>
+      <label>Contraseña</label><input name="pass" type="password" autocomplete="current-password" required>
+      <div id="msg"></div>
+      <div class="btns"><button class="btn" type="submit">Ingresar</button></div>
+    </form>
+  </div>`;
+  $('#f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target; const b = f.querySelector('button'); b.disabled = true;
+    const { error } = await sb.auth.signInWithPassword({ email: f.email.value.trim(), password: f.pass.value });
+    b.disabled = false;
+    if (error) { $('#msg').innerHTML = `<div class="err">No pude ingresar: ${esc(error.message)}</div>`; return; }
+    route();
+  };
+}
+function viewNoAccess(session) {
+  setHeader('TU TALLER MÓVIL');
+  app().innerHTML = `<div class="card"><p>El usuario <b>${esc(session.user.email)}</b> no tiene acceso a esta app.</p><div class="btns"><button class="btn sec" id="lo">Cerrar sesión</button></div></div>`;
+  $('#lo').onclick = async () => { await sb.auth.signOut(); route(); };
+}
+
+// ===== Inicio =====
+async function viewHome() {
+  setHeader('TU TALLER MÓVIL', null, GEAR);
+  const [cl, tr] = await Promise.all([
+    sb.from('tm_clientes').select('id,nombre,telefono,zona,tm_vehiculos(id,marca,modelo,patente)').order('nombre').then(chk),
+    sb.from('tm_trabajos').select('id,numero,fecha,titulo,estado,descuento,tm_items(tipo,cantidad,precio_unit,costo_unit),tm_vehiculos(marca,modelo,patente,tm_clientes(nombre))').order('fecha', { ascending: false }).order('numero', { ascending: false }).limit(300).then(chk)
+  ]);
+  const mes = hoy().slice(0, 7);
+  let fact = 0, marg = 0, cobrar = 0, nmes = 0;
+  for (const t of tr) {
+    const T = totales({ items: t.tm_items, descuento: t.descuento });
+    if (['realizado', 'cobrado'].includes(t.estado) && String(t.fecha).startsWith(mes)) { fact += T.total; marg += T.margen; nmes++; }
+    if (t.estado === 'realizado') cobrar += T.total;
+  }
+  app().innerHTML = `
+  <div class="stats">
+    <div class="stat"><div class="k">Fact. mes</div><div class="v">${money(fact)}</div></div>
+    <div class="stat"><div class="k">Margen mes</div><div class="v">${money(marg)}</div></div>
+    <div class="stat"><div class="k">A cobrar</div><div class="v" style="color:${cobrar ? 'var(--rojo)' : 'inherit'}">${money(cobrar)}</div></div>
+  </div>
+  <input id="q" type="search" placeholder="Buscar cliente, teléfono o patente…" autocomplete="off">
+  <h2>Clientes (${cl.length})</h2>
+  <div class="list" id="cl">${cl.map(c => {
+    const vs = c.tm_vehiculos || [];
+    const s = [c.nombre, c.telefono, c.zona, ...vs.map(v => `${v.patente} ${v.marca} ${v.modelo}`)].join(' ').toLowerCase();
+    return `<a class="item" href="#/c/${c.id}" data-s="${esc(s)}"><div class="grow"><div class="t">${esc(c.nombre)}</div><div class="s">${esc(vs.map(v => [v.marca, v.modelo, v.patente].filter(Boolean).join(' ')).join(' · ') || 'Sin vehículos')}</div></div><div class="r muted">${esc(c.telefono || '')}</div></a>`;
+  }).join('') || '<div class="empty">Todavía no cargaste clientes.</div>'}</div>
+  <h2>Últimos trabajos</h2>
+  <div class="list">${tr.slice(0, 8).map(t => {
+    const v = t.tm_vehiculos || {}; const T = totales({ items: t.tm_items, descuento: t.descuento });
+    return `<a class="item" href="#/t/${t.id}"><div class="grow"><div class="t">${esc(t.titulo)}</div><div class="s">N° ${pad(t.numero)} · ${fecha(t.fecha)} · ${esc(v.tm_clientes?.nombre || '')} · ${esc([v.marca, v.modelo, v.patente].filter(Boolean).join(' '))}</div></div><div class="r">${chip(t.estado)}<div><b>${money(T.total)}</b></div></div></a>`;
+  }).join('') || '<div class="empty">Sin trabajos todavía.</div>'}</div>
+  <button class="btn fab" onclick="go('#/cn')">＋ Cliente</button>${nav('#/')}`;
+  $('#q').oninput = e => { const q = e.target.value.trim().toLowerCase(); document.querySelectorAll('#cl .item').forEach(el => el.style.display = !q || el.dataset.s.includes(q) ? '' : 'none'); };
+}
+
+// ===== Clientes =====
+async function viewCliente(id) {
+  const c = await sb.from('tm_clientes').select('*,tm_vehiculos(*)').eq('id', id).single().then(chk);
+  setHeader(c.nombre, '#/', `<button class="act" aria-label="Editar" onclick="go('#/ce/${c.id}')">✎</button>`);
+  const wa = waPhone(c.telefono);
+  app().innerHTML = `
+  <div class="card">
+    <dl class="kv">
+      ${c.telefono ? `<dt>Teléfono</dt><dd>${esc(c.telefono)}</dd>` : ''}
+      ${c.email ? `<dt>Email</dt><dd>${esc(c.email)}</dd>` : ''}
+      ${c.direccion ? `<dt>Dirección</dt><dd>${esc(c.direccion)}</dd>` : ''}
+      ${c.zona ? `<dt>Zona</dt><dd>${esc(c.zona)}</dd>` : ''}
+      ${c.notas ? `<dt>Notas</dt><dd>${esc(c.notas)}</dd>` : ''}
+    </dl>
+    <div class="btns">
+      ${wa ? `<a class="btn wa" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
+      ${c.telefono ? `<a class="btn sec" href="tel:${esc(c.telefono)}">Llamar</a>` : ''}
+    </div>
+  </div>
+  <h2>Vehículos</h2>
+  <div class="list">${(c.tm_vehiculos || []).map(v => `<a class="item" href="#/v/${v.id}"><div class="grow"><div class="t">${esc(vehTxt(v))}</div><div class="s">${esc(v.patente || 'Sin patente')}${v.motor ? ' · ' + esc(v.motor) : ''}</div></div><div class="r muted">›</div></a>`).join('') || '<div class="empty">Sin vehículos.</div>'}</div>
+  <button class="btn fab" onclick="go('#/vn/${c.id}')">＋ Vehículo</button>`;
+}
+async function viewClienteForm(id) {
+  const c = id ? await sb.from('tm_clientes').select('*').eq('id', id).single().then(chk) : {};
+  setHeader(id ? 'Editar cliente' : 'Nuevo cliente', id ? `#/c/${id}` : '#/');
+  app().innerHTML = `
+  <form class="card" id="f">
+    <label>Nombre *</label><input name="nombre" required value="${esc(c.nombre)}">
+    <div class="row"><div><label>Teléfono / WhatsApp</label><input name="telefono" type="tel" value="${esc(c.telefono)}" placeholder="11 1234-5678"></div>
+    <div><label>Email</label><input name="email" type="email" value="${esc(c.email)}"></div></div>
+    <div class="row"><div><label>Dirección</label><input name="direccion" value="${esc(c.direccion)}"></div>
+    <div><label>Zona / barrio</label><input name="zona" value="${esc(c.zona)}" placeholder="Bernal, Quilmes…"></div></div>
+    <label>Notas</label><textarea name="notas">${esc(c.notas)}</textarea>
+    <div class="btns"><button class="btn" type="submit">Guardar</button>${id ? '<button class="btn ghost" type="button" id="del">Eliminar</button>' : ''}</div>
+  </form>`;
+  $('#f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target;
+    const row = { nombre: f.nombre.value.trim(), telefono: f.telefono.value.trim() || null, email: f.email.value.trim() || null, direccion: f.direccion.value.trim() || null, zona: f.zona.value.trim() || null, notas: f.notas.value.trim() || null };
+    try {
+      const r = id ? await sb.from('tm_clientes').update(row).eq('id', id).select('id').single().then(chk) : await sb.from('tm_clientes').insert(row).select('id').single().then(chk);
+      toast('Cliente guardado'); go('#/c/' + r.id);
+    } catch (e) { fail(e); }
+  };
+  if (id) $('#del').onclick = async () => {
+    if (!confirm('¿Eliminar este cliente con TODOS sus vehículos y trabajos? No se puede deshacer.')) return;
+    try { await sb.from('tm_clientes').delete().eq('id', id).then(chk); toast('Cliente eliminado'); go('#/'); } catch (e) { fail(e); }
+  };
+}
+
+// ===== Vehículos =====
+async function viewVehiculoForm(clienteId, id) {
+  const v = id ? await sb.from('tm_vehiculos').select('*').eq('id', id).single().then(chk) : { cliente_id: clienteId };
+  setHeader(id ? 'Editar vehículo' : 'Nuevo vehículo', id ? `#/v/${id}` : `#/c/${clienteId}`);
+  app().innerHTML = `
+  <form class="card" id="f">
+    <div class="row"><div><label>Marca *</label><input name="marca" required value="${esc(v.marca)}" placeholder="Chevrolet"></div>
+    <div><label>Modelo *</label><input name="modelo" required value="${esc(v.modelo)}" placeholder="Meriva"></div></div>
+    <div class="row"><div><label>Año</label><input name="anio" type="number" inputmode="numeric" min="1950" max="2100" value="${esc(v.anio)}"></div>
+    <div><label>Patente</label><input name="patente" value="${esc(v.patente)}" style="text-transform:uppercase" placeholder="AB123CD"></div></div>
+    <label>Motor / versión</label><input name="motor" value="${esc(v.motor)}" placeholder="1.8 nafta">
+    <label>Notas</label><textarea name="notas" placeholder="Medidas, aceite que usa, particularidades…">${esc(v.notas)}</textarea>
+    <div class="btns"><button class="btn" type="submit">Guardar</button>${id ? '<button class="btn ghost" type="button" id="del">Eliminar</button>' : ''}</div>
+  </form>`;
+  $('#f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target;
+    const row = { marca: f.marca.value.trim(), modelo: f.modelo.value.trim(), anio: f.anio.value ? parseInt(f.anio.value) : null, patente: f.patente.value.trim().toUpperCase().replace(/\s+/g, '') || null, motor: f.motor.value.trim() || null, notas: f.notas.value.trim() || null };
+    try {
+      const r = id ? await sb.from('tm_vehiculos').update(row).eq('id', id).select('id').single().then(chk) : await sb.from('tm_vehiculos').insert({ ...row, cliente_id: v.cliente_id, token: newToken() }).select('id').single().then(chk);
+      toast('Vehículo guardado'); go('#/v/' + r.id);
+    } catch (e) { fail(e); }
+  };
+  if (id) $('#del').onclick = async () => {
+    if (!confirm('¿Eliminar este vehículo con todos sus trabajos? No se puede deshacer.')) return;
+    try { await sb.from('tm_vehiculos').delete().eq('id', id).then(chk); toast('Vehículo eliminado'); go('#/c/' + v.cliente_id); } catch (e) { fail(e); }
+  };
+}
+async function viewVehiculo(id) {
+  const v = await sb.from('tm_vehiculos').select('*,tm_clientes(id,nombre,telefono),tm_trabajos(id,numero,fecha,km,titulo,estado,descuento,tm_items(tipo,cantidad,precio_unit,costo_unit))').eq('id', id).single().then(chk);
+  const c = v.tm_clientes;
+  setHeader(vehTxt(v), `#/c/${c.id}`, `<button class="act" aria-label="Editar" onclick="go('#/ve/${v.id}')">✎</button>`);
+  const trs = (v.tm_trabajos || []).sort((a, b) => (b.fecha || '').localeCompare(a.fecha || '') || b.numero - a.numero);
+  const link = portalUrl(v.token);
+  app().innerHTML = `
+  <div class="card">
+    <dl class="kv">
+      <dt>Cliente</dt><dd><a href="#/c/${c.id}">${esc(c.nombre)}</a></dd>
+      ${v.patente ? `<dt>Patente</dt><dd><b>${esc(v.patente)}</b></dd>` : ''}
+      ${v.motor ? `<dt>Motor</dt><dd>${esc(v.motor)}</dd>` : ''}
+      ${trs[0]?.km ? `<dt>Últ. km</dt><dd>${kmf(trs[0].km)}</dd>` : ''}
+      ${v.notas ? `<dt>Notas</dt><dd>${esc(v.notas)}</dd>` : ''}
+    </dl>
+  </div>
+  <div class="card">
+    <b>Portal del cliente</b>
+    <div class="muted small">Link privado de solo lectura con el historial de este vehículo. Sin costos internos.</div>
+    <div class="linkbox">${esc(link)}</div>
+    <div class="btns">
+      <button class="btn wa" id="wl">Enviar por WhatsApp</button>
+      <button class="btn sec" id="cp">Copiar</button>
+      <button class="btn ghost" id="rg">Regenerar</button>
+    </div>
+  </div>
+  <h2>Trabajos (${trs.length})</h2>
+  <div class="list">${trs.map(t => { const T = totales({ items: t.tm_items, descuento: t.descuento });
+    return `<a class="item" href="#/t/${t.id}"><div class="grow"><div class="t">${esc(t.titulo)}</div><div class="s">N° ${pad(t.numero)} · ${fecha(t.fecha)}${t.km ? ' · ' + kmf(t.km) : ''}</div></div><div class="r">${chip(t.estado)}<div><b>${money(T.total)}</b></div></div></a>`; }).join('') || '<div class="empty">Sin trabajos.</div>'}</div>
+  <button class="btn fab" onclick="go('#/tn/${v.id}')">＋ Trabajo</button>`;
+  $('#cp').onclick = async () => { try { await navigator.clipboard.writeText(link); toast('Link copiado'); } catch (e) { prompt('Copiá el link:', link); } };
+  $('#wl').onclick = () => {
+    const txt = `Hola ${c.nombre}! Acá podés ver el historial de servicios de tu ${vehTxt(v)}${v.patente ? ' (' + v.patente + ')' : ''}: ${link}\n${CFG.negocio || ''}`;
+    window.open('https://wa.me/' + waPhone(c.telefono) + '?text=' + encodeURIComponent(txt), '_blank');
+  };
+  $('#rg').onclick = async () => {
+    if (!confirm('El link anterior deja de funcionar. ¿Generar uno nuevo?')) return;
+    try { await sb.from('tm_vehiculos').update({ token: newToken() }).eq('id', v.id).then(chk); toast('Link regenerado'); route(); } catch (e) { fail(e); }
+  };
+}
+
+// ===== Trabajos =====
+let T = null; // estado del editor
+async function viewTrabajo(id, vehId) {
+  let veh;
+  if (id) {
+    const t = await sb.from('tm_trabajos').select('*,tm_items(*),tm_vehiculos(*,tm_clientes(*))').eq('id', id).single().then(chk);
+    veh = t.tm_vehiculos;
+    T = { ...t, items: (t.tm_items || []).sort((a, b) => a.orden - b.orden).map(i => ({ ...i })) };
+    delete T.tm_items; delete T.tm_vehiculos;
+  } else {
+    veh = await sb.from('tm_vehiculos').select('*,tm_clientes(*)').eq('id', vehId).single().then(chk);
+    T = { id: null, vehiculo_id: veh.id, fecha: hoy(), estado: 'presupuesto', titulo: '', descripcion: '', observaciones: '', km: null, descuento: 0, proximo_km: null, proximo_fecha: null, proximo_texto: '', items: [{ tipo: 'mano_obra', descripcion: 'Mano de obra', cantidad: 1, costo_unit: 0, precio_unit: 0 }] };
+  }
+  T._veh = veh;
+  setHeader(id ? `Trabajo N° ${pad(T.numero)}` : 'Nuevo trabajo', `#/v/${veh.id}`);
+  const c = veh.tm_clientes;
+  app().innerHTML = `
+  <div class="card small muted">${esc(c.nombre)} · ${esc(vehTxt(veh))}${veh.patente ? ' · ' + esc(veh.patente) : ''}</div>
+  <div class="card">
+    <label>Estado</label>
+    <div class="seg" id="seg">${Object.entries(ESTADOS).map(([k, l]) => `<button type="button" data-e="${k}" class="${T.estado === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <label>Trabajo *</label><input id="titulo" list="servs" value="${esc(T.titulo)}" placeholder="Ej: Cambio de pastillas de freno delanteras">
+    <datalist id="servs">${SERVICIOS.map(s => `<option value="${esc(s)}">`).join('')}</datalist>
+    <div class="row"><div><label>Fecha</label><input id="fecha" type="date" value="${esc(T.fecha)}"></div>
+    <div><label>Km del vehículo</label><input id="km" type="number" inputmode="numeric" value="${esc(T.km)}"></div></div>
+    <label>Detalle del trabajo</label><textarea id="descripcion" placeholder="Qué se hizo / qué se va a hacer">${esc(T.descripcion)}</textarea>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <b>Mano de obra y repuestos</b>
+      <span class="small muted" style="white-space:nowrap">Recargo sug. <input id="rec" type="number" inputmode="decimal" step="any" style="width:64px;padding:6px" value="${esc(lsGet('tm_recargo', ''))}">%</span>
+    </div>
+    <div id="items" style="margin-top:10px"></div>
+    <div class="btns">
+      <button class="btn sec" type="button" data-add="mano_obra">＋ Mano de obra</button>
+      <button class="btn sec" type="button" data-add="repuesto">＋ Repuesto</button>
+      <button class="btn sec" type="button" data-add="insumo">＋ Insumo</button>
+    </div>
+    <div class="row" style="margin-top:6px"><div><label>Descuento ($)</label><input id="descuento" type="number" inputmode="decimal" step="any" value="${esc(n(T.descuento) || '')}"></div><div></div></div>
+    <div id="tots" style="margin-top:10px"></div>
+  </div>
+  <div id="kv"></div>
+  <div class="card">
+    <b>Próximo control recomendado</b>
+    <div class="row"><div><label>A los km</label><input id="proximo_km" type="number" inputmode="numeric" value="${esc(T.proximo_km)}"></div>
+    <div><label>O fecha</label><input id="proximo_fecha" type="date" value="${esc(T.proximo_fecha)}"></div></div>
+    <label>Recomendación</label><input id="proximo_texto" value="${esc(T.proximo_texto)}" placeholder="Ej: revisar discos en el próximo cambio de pastillas">
+    <label>Observaciones (salen en el PDF)</label><textarea id="observaciones">${esc(T.observaciones)}</textarea>
+  </div>
+  <div class="btns">
+    <button class="btn" id="save">Guardar</button>
+    <button class="btn wa" id="share">PDF por WhatsApp</button>
+    <button class="btn sec" id="dl">Descargar PDF</button>
+  </div>
+  ${id ? '<div class="btns"><button class="btn ghost" id="del">Eliminar trabajo</button></div>' : ''}`;
+
+  renderItems();
+  if (T.id) renderComprasVinculadas();
+  $('#seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; T.estado = b.dataset.e; document.querySelectorAll('#seg button').forEach(x => x.classList.toggle('on', x === b)); };
+  ['titulo', 'fecha', 'km', 'descripcion', 'descuento', 'proximo_km', 'proximo_fecha', 'proximo_texto', 'observaciones'].forEach(k => $('#' + k).addEventListener('input', e => { T[k] = e.target.value; if (k === 'descuento') renderTots(); }));
+  $('#rec').oninput = e => lsSet('tm_recargo', e.target.value);
+  document.querySelectorAll('[data-add]').forEach(b => b.onclick = () => {
+    const tipo = b.dataset.add;
+    T.items.push({ tipo, descripcion: tipo === 'mano_obra' ? 'Mano de obra' : '', cantidad: 1, costo_unit: 0, precio_unit: 0 });
+    renderItems(); const ins = document.querySelectorAll('#items .it'); ins[ins.length - 1]?.querySelector('[data-k=descripcion]')?.focus();
+  });
+  $('#save').onclick = async () => { if (await guardarTrabajo()) toast('Trabajo guardado'); };
+  $('#share').onclick = async () => { if (await guardarTrabajo()) compartirPDF(datosPDF()); };
+  $('#dl').onclick = async () => { if (await guardarTrabajo()) { const d = datosPDF(); buildPDF(d).save(nombrePDF(d)); } };
+  if (id) $('#del').onclick = async () => {
+    if (!confirm('¿Eliminar este trabajo? No se puede deshacer.')) return;
+    try { await sb.from('tm_trabajos').delete().eq('id', T.id).then(chk); toast('Trabajo eliminado'); go('#/v/' + veh.id); } catch (e) { fail(e); }
+  };
+}
+async function renderComprasVinculadas() {
+  try {
+    const ks = await sb.from('tm_compras').select('id,fecha,tm_proveedores(nombre),tm_compra_items(descripcion,cantidad,costo_unit)').eq('trabajo_id', T.id).order('fecha').then(chk);
+    const tot = ks.reduce((s, k) => s + totCompra(k), 0);
+    $('#kv').innerHTML = `<div class="card">
+      <b>Compras para este trabajo</b> <span class="muted small">(referencia interna)</span>
+      <div class="list" style="margin-top:8px">${ks.map(k => `<a class="item" style="box-shadow:none;border:1px solid var(--gris-2)" href="#/k/${k.id}"><div class="grow"><div class="t">${esc(k.tm_proveedores?.nombre || 'Sin proveedor')}</div><div class="s">${fecha(k.fecha)} · ${esc((k.tm_compra_items || []).map(i => i.descripcion).join(', '))}</div></div><div class="r"><b>${money(totCompra(k))}</b></div></a>`).join('') || '<div class="muted small">Ninguna todavía.</div>'}</div>
+      ${ks.length ? `<div class="tot"><span>Total comprado</span><b>${money(tot)}</b></div>` : ''}
+      <div class="btns"><button class="btn sec" type="button" onclick="go('#/kn/${T.id}')">＋ Compra para este trabajo</button></div>
+    </div>`;
+  } catch (e) { console.error(e); }
+}
+function renderItems() {
+  const cls = { mano_obra: 'mo', repuesto: 'rep', insumo: 'ins' };
+  $('#items').innerHTML = T.items.map((i, k) => `
+    <div class="it ${cls[i.tipo]}" data-i="${k}">
+      <button class="x" type="button" data-del="${k}" aria-label="Quitar">×</button>
+      <div class="row" style="padding-right:22px">
+        <div style="flex:0 0 150px"><select data-k="tipo" style="font-size:14px;padding:10px 6px">${Object.entries(TIPOS).map(([v, l]) => `<option value="${v}" ${i.tipo === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+        <div><input data-k="descripcion" value="${esc(i.descripcion)}" placeholder="Descripción"></div>
+      </div>
+      <div class="g">
+        <div><label>Cant.</label><input data-k="cantidad" type="number" inputmode="decimal" step="any" value="${esc(i.cantidad)}"></div>
+        <div><label>Costo u. <span title="Interno">🔒</span></label><input data-k="costo_unit" type="number" inputmode="decimal" step="any" value="${esc(n(i.costo_unit) || '')}"></div>
+        <div><label>Precio u.</label><input data-k="precio_unit" type="number" inputmode="decimal" step="any" value="${esc(n(i.precio_unit) || '')}"></div>
+      </div>
+      <div class="sub">Subtotal <b data-sub>${money(n(i.cantidad) * n(i.precio_unit))}</b></div>
+    </div>`).join('') || '<div class="empty small">Sin ítems.</div>';
+  $('#items').oninput = $('#items').onchange = e => {
+    const el = e.target, box = el.closest('.it'); if (!box || !el.dataset.k) return;
+    const i = T.items[+box.dataset.i], k = el.dataset.k;
+    i[k] = el.value;
+    if (k === 'tipo') { box.className = 'it ' + cls[i.tipo]; }
+    if (k === 'precio_unit') i._auto = false;
+    if (k === 'costo_unit' && i.tipo !== 'mano_obra') {
+      const r = n(lsGet('tm_recargo', ''));
+      if (r && (!n(i.precio_unit) || i._auto)) { i.precio_unit = Math.round(n(i.costo_unit) * (1 + r / 100)); i._auto = true; box.querySelector('[data-k=precio_unit]').value = i.precio_unit; }
+    }
+    box.querySelector('[data-sub]').textContent = money(n(i.cantidad) * n(i.precio_unit));
+    renderTots();
+  };
+  $('#items').onclick = e => { const d = e.target.closest('[data-del]'); if (!d) return; T.items.splice(+d.dataset.del, 1); renderItems(); };
+  renderTots();
+}
+function renderTots() {
+  const x = totales(T);
+  $('#tots').innerHTML = `
+    <div class="tot"><span>Mano de obra</span><span>${money(x.mo)}</span></div>
+    <div class="tot"><span>Repuestos e insumos</span><span>${money(x.rep)}</span></div>
+    ${x.desc ? `<div class="tot"><span>Descuento</span><span>− ${money(x.desc)}</span></div>` : ''}
+    <div class="tot big"><span>Total</span><span>${money(x.total)}</span></div>
+    <div class="interno">🔒 Interno, no sale en el PDF: costo ${money(x.costo)} · margen <b>${money(x.margen)}</b>${x.rep ? ` · recargo real s/ repuestos ${x.costo ? ((x.rep - x.costo) / x.costo * 100).toFixed(1) + '%' : '—'}` : ''}</div>`;
+}
+async function guardarTrabajo() {
+  const titulo = String(T.titulo || '').trim();
+  if (!titulo) { toast('Poné el nombre del trabajo'); $('#titulo').focus(); return false; }
+  const intOrNull = v => v === '' || v == null ? null : parseInt(v);
+  const row = {
+    vehiculo_id: T.vehiculo_id, fecha: T.fecha || hoy(), km: intOrNull(T.km), titulo, descripcion: (T.descripcion || '').trim() || null,
+    observaciones: (T.observaciones || '').trim() || null, estado: T.estado, descuento: n(T.descuento),
+    proximo_km: intOrNull(T.proximo_km), proximo_fecha: T.proximo_fecha || null, proximo_texto: (T.proximo_texto || '').trim() || null,
+    updated_at: new Date().toISOString()
+  };
+  const btns = document.querySelectorAll('.btns .btn'); btns.forEach(b => b.disabled = true);
+  try {
+    const nuevo = !T.id;
+    if (nuevo) { const r = await sb.from('tm_trabajos').insert(row).select('id,numero').single().then(chk); T.id = r.id; T.numero = r.numero; }
+    else await sb.from('tm_trabajos').update(row).eq('id', T.id).then(chk);
+    Object.assign(T, row);
+    await sb.from('tm_items').delete().eq('trabajo_id', T.id).then(chk);
+    const items = T.items.filter(i => String(i.descripcion || '').trim()).map((i, k) => ({ trabajo_id: T.id, orden: k, tipo: i.tipo, descripcion: String(i.descripcion).trim(), cantidad: n(i.cantidad) || 1, costo_unit: n(i.costo_unit), precio_unit: n(i.precio_unit) }));
+    if (items.length) await sb.from('tm_items').insert(items).then(chk);
+    if (nuevo) { history.replaceState(null, '', '#/t/' + T.id); setHeader(`Trabajo N° ${pad(T.numero)}`, `#/v/${T.vehiculo_id}`); }
+    return true;
+  } catch (e) { fail(e); return false; }
+  finally { btns.forEach(b => b.disabled = false); }
+}
+function datosPDF() {
+  const v = T._veh, c = v.tm_clientes;
+  return { config: CFG, cliente: { nombre: c.nombre, telefono: c.telefono, direccion: c.direccion }, vehiculo: v, trabajo: { ...T, items: T.items.filter(i => String(i.descripcion || '').trim()) } };
+}
+
+// ===== PDF =====
+function nombrePDF(d) {
+  const t = d.trabajo, real = ['realizado', 'cobrado'].includes(t.estado);
+  return `${real ? 'Trabajo' : 'Presupuesto'}-${pad(t.numero)}${d.vehiculo.patente ? '-' + d.vehiculo.patente : ''}.pdf`;
+}
+function buildPDF(d) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a5' });
+  const W = 148, H = 210, M = 10;
+  const AZ = [11, 77, 162], RO = [215, 38, 61], GR = [91, 98, 112], NE = [20, 22, 26], CL = [242, 244, 247];
+  const cfg = d.config || {}, t = d.trabajo, v = d.vehiculo || {}, c = d.cliente || {};
+  const real = ['realizado', 'cobrado'].includes(t.estado);
+  const X = totales(t);
+  let y;
+  const ensure = h => { if (y + h > H - 16) { doc.addPage(); y = 14; } };
+
+  // Encabezado
+  doc.setFillColor(...NE); doc.rect(0, 0, W, 24, 'F');
+  doc.setFillColor(...AZ); doc.rect(0, 24, W, 1.6, 'F');
+  doc.setFillColor(...RO); doc.rect(0, 25.6, W, 0.9, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
+  doc.text(String(cfg.negocio || 'Tu Taller Móvil').toUpperCase(), M, 12);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(190, 196, 206);
+  doc.text('Mantenimiento automotor a domicilio', M, 18);
+  if (cfg.telefono) { doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.text('WhatsApp ' + cfg.telefono, W - M, 12, { align: 'right' }); }
+
+  // Tipo de documento
+  y = 36;
+  doc.setTextColor(...AZ); doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+  doc.text(real ? 'TRABAJO REALIZADO' : 'PRESUPUESTO', M, y);
+  doc.setTextColor(...NE); doc.setFontSize(10);
+  doc.text('N° ' + pad(t.numero), W - M, y - 4, { align: 'right' });
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...GR);
+  doc.text('Fecha: ' + fecha(t.fecha), W - M, y + 0.5, { align: 'right' });
+
+  // Cliente / vehículo
+  y += 5;
+  const bw = (W - 2 * M - 4) / 2;
+  doc.setFillColor(...CL); doc.roundedRect(M, y, bw, 21, 2, 2, 'F'); doc.roundedRect(M + bw + 4, y, bw, 21, 2, 2, 'F');
+  const box = (x, tit, lines) => {
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(...GR); doc.text(tit, x + 3, y + 5);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...NE); doc.text(doc.splitTextToSize(lines[0] || '', bw - 6)[0] || '', x + 3, y + 10.5);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...GR);
+    lines.slice(1).filter(Boolean).slice(0, 2).forEach((l, k) => doc.text(doc.splitTextToSize(l, bw - 6)[0], x + 3, y + 15 + k * 4));
+  };
+  box(M, 'CLIENTE', [c.nombre, c.telefono ? 'Tel. ' + c.telefono : '', c.direccion || '']);
+  box(M + bw + 4, 'VEHÍCULO', [vehTxt(v), v.patente ? 'Patente ' + v.patente : '', t.km ? 'Km ' + n(t.km).toLocaleString('es-AR') : '']);
+  y += 28;
+
+  // Título y detalle
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(...NE);
+  const tl = doc.splitTextToSize(t.titulo || '', W - 2 * M); doc.text(tl, M, y); y += tl.length * 5;
+  if (t.descripcion) {
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...GR);
+    const dl = doc.splitTextToSize(t.descripcion, W - 2 * M); ensure(dl.length * 4); doc.text(dl, M, y); y += dl.length * 4 + 1;
+  }
+  y += 2;
+
+  // Ítems
+  const orden = { mano_obra: 0, repuesto: 1, insumo: 2 };
+  const items = [...(t.items || [])].sort((a, b) => orden[a.tipo] - orden[b.tipo]);
+  const fm = v => '$ ' + n(v).toLocaleString('es-AR', { maximumFractionDigits: 2 });
+  doc.autoTable({
+    startY: y, margin: { left: M, right: M, bottom: 16 },
+    head: [['Descripción', 'Cant.', 'P. unit.', 'Subtotal']],
+    body: items.map(i => [i.descripcion, n(i.cantidad).toLocaleString('es-AR'), fm(i.precio_unit), fm(n(i.cantidad) * n(i.precio_unit))]),
+    styles: { font: 'helvetica', fontSize: 8.5, cellPadding: 1.8, textColor: NE, lineColor: [225, 228, 233], lineWidth: 0.1 },
+    headStyles: { fillColor: AZ, textColor: 255, fontStyle: 'bold' },
+    alternateRowStyles: { fillColor: [248, 249, 251] },
+    columnStyles: { 1: { halign: 'right', cellWidth: 13 }, 2: { halign: 'right', cellWidth: 24 }, 3: { halign: 'right', cellWidth: 25 } }
+  });
+  y = doc.lastAutoTable.finalY + 5;
+
+  // Totales
+  ensure(30);
+  const tx = W - M - 62;
+  const line = (l, val, bold) => { doc.setFont('helvetica', bold ? 'bold' : 'normal'); doc.setFontSize(bold ? 10 : 8.5); doc.setTextColor(...(bold ? NE : GR)); doc.text(l, tx, y); doc.text(val, W - M, y, { align: 'right' }); y += 4.6; };
+  if (X.mo) line('Mano de obra', fm(X.mo));
+  if (X.rep) line('Repuestos e insumos', fm(X.rep));
+  if (X.desc) line('Descuento', '- ' + fm(X.desc));
+  y += 0.5;
+  doc.setFillColor(...RO); doc.roundedRect(tx - 3, y - 4.2, W - M - tx + 3, 9, 1.5, 1.5, 'F');
+  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(11.5);
+  doc.text('TOTAL', tx, y + 1.8); doc.text(fm(X.total), W - M - 2, y + 1.8, { align: 'right' });
+  y += 12;
+
+  // Bloques de texto
+  const bloque = (tit, txt) => {
+    if (!txt) return;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
+    const ls = doc.splitTextToSize(String(txt), W - 2 * M - 4);
+    ensure(ls.length * 3.8 + 8);
+    doc.setFillColor(...AZ); doc.rect(M, y - 3, 1, ls.length * 3.8 + 5, 'F');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...AZ); doc.text(tit, M + 3, y);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...NE); doc.text(ls, M + 3, y + 4);
+    y += ls.length * 3.8 + 8;
+  };
+  const prox = [t.proximo_km ? 'a los ' + n(t.proximo_km).toLocaleString('es-AR') + ' km' : '', t.proximo_fecha ? 'el ' + fecha(t.proximo_fecha) : ''].filter(Boolean).join(' o ');
+  bloque('PRÓXIMO CONTROL RECOMENDADO', [prox ? 'Recomendamos un nuevo control ' + prox + '.' : '', t.proximo_texto || ''].filter(Boolean).join(' '));
+  bloque('OBSERVACIONES', t.observaciones);
+  bloque('GARANTÍA', cfg.garantia);
+  if (!real) bloque('VALIDEZ', 'Presupuesto válido por 7 días. Los precios de repuestos pueden variar según disponibilidad.');
+
+  // Pie en todas las páginas
+  const pages = doc.getNumberOfPages();
+  for (let p = 1; p <= pages; p++) {
+    doc.setPage(p);
+    doc.setDrawColor(...[225, 228, 233]); doc.setLineWidth(0.2); doc.line(M, H - 11, W - M, H - 11);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...GR);
+    doc.text([cfg.negocio, cfg.telefono ? 'WhatsApp ' + cfg.telefono : ''].filter(Boolean).join(' · '), M, H - 7);
+    if (cfg.pie) doc.text(cfg.pie, W - M, H - 7, { align: 'right' });
+    if (pages > 1) doc.text(`${p}/${pages}`, W / 2, H - 4, { align: 'center' });
+  }
+  return doc;
+}
+async function compartirPDF(d) {
+  const t = d.trabajo, v = d.vehiculo, c = d.cliente, real = ['realizado', 'cobrado'].includes(t.estado);
+  const name = nombrePDF(d), doc = buildPDF(d);
+  const file = new File([doc.output('blob')], name, { type: 'application/pdf' });
+  const texto = `Hola ${c.nombre}! Te paso el ${real ? 'detalle del trabajo realizado' : 'presupuesto'} de tu ${vehTxt(v)}${v.patente ? ' (' + v.patente + ')' : ''}. Total: ${money(totales(t).total)}. Cualquier consulta, escribime. ${CFG.negocio || ''}`;
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: name, text: texto }); return; }
+    catch (e) { if (e.name === 'AbortError') return; }
+  }
+  doc.save(name);
+  toast('PDF descargado. Adjuntalo en el chat que se abre.');
+  setTimeout(() => window.open('https://wa.me/' + waPhone(c.telefono) + '?text=' + encodeURIComponent(texto), '_blank'), 600);
+}
+
+// ===== Compras =====
+async function viewCompras() {
+  setHeader('Compras', null, GEAR);
+  const mes = hoy().slice(0, 7), ini = mes + '-01';
+  const [ks, cob] = await Promise.all([
+    sb.from('tm_compras').select('id,fecha,comprobante,medio_pago,tm_proveedores(nombre),tm_compra_items(categoria,descripcion,cantidad,costo_unit),tm_trabajos(numero)').order('fecha', { ascending: false }).order('created_at', { ascending: false }).limit(300).then(chk),
+    sb.from('tm_trabajos').select('descuento,tm_items(tipo,cantidad,precio_unit,costo_unit)').eq('estado', 'cobrado').gte('fecha', ini).then(chk)
+  ]);
+  const porCat = { repuesto: 0, insumo: 0, herramienta: 0, otro: 0 };
+  let compMes = 0, herrTotal = 0;
+  for (const k of ks) for (const i of k.tm_compra_items || []) {
+    const s = n(i.cantidad) * n(i.costo_unit);
+    if (i.categoria === 'herramienta') herrTotal += s;
+    if (String(k.fecha).startsWith(mes)) { compMes += s; porCat[i.categoria] = (porCat[i.categoria] || 0) + s; }
+  }
+  const cobrado = cob.reduce((s, t) => s + totales({ items: t.tm_items, descuento: t.descuento }).total, 0);
+  const caja = cobrado - compMes;
+  app().innerHTML = `
+  <div class="stats">
+    <div class="stat"><div class="k">Compras mes</div><div class="v">${money(compMes)}</div></div>
+    <div class="stat"><div class="k">Caja mes</div><div class="v" style="color:${caja < 0 ? 'var(--rojo)' : 'var(--verde)'}">${money(caja)}</div></div>
+    <div class="stat"><div class="k">Herramientas</div><div class="v">${money(herrTotal)}</div></div>
+  </div>
+  <div class="card small">
+    <div class="muted" style="margin-bottom:4px">Este mes por categoría</div>
+    ${Object.entries(CATS).map(([c, l]) => `<div class="tot"><span><span class="chip k-${c}">${l}</span></span><span>${money(porCat[c])}</span></div>`).join('')}
+    <div class="muted" style="margin-top:6px">Caja = cobrado este mes (${money(cobrado)}) − compras del mes. Herramientas = inversión acumulada total.</div>
+  </div>
+  <input id="q" type="search" placeholder="Buscar proveedor o artículo…" autocomplete="off">
+  <h2>Compras (${ks.length})</h2>
+  <div class="list" id="kl">${ks.map(k => {
+    const its = k.tm_compra_items || []; const cats = [...new Set(its.map(i => i.categoria))];
+    const s = [k.tm_proveedores?.nombre, k.comprobante, ...its.map(i => i.descripcion)].join(' ').toLowerCase();
+    return `<a class="item" href="#/k/${k.id}" data-s="${esc(s)}"><div class="grow"><div class="t">${esc(k.tm_proveedores?.nombre || 'Sin proveedor')}</div><div class="s">${fecha(k.fecha)}${k.tm_trabajos ? ' · Trab. N° ' + pad(k.tm_trabajos.numero) : ''} · ${esc(its.map(i => i.descripcion).join(', '))}</div></div><div class="r">${cats.map(c => `<span class="chip k-${c}">${CATS[c]}</span>`).join(' ')}<div><b>${money(totCompra(k))}</b></div></div></a>`;
+  }).join('') || '<div class="empty">Todavía no cargaste compras.</div>'}</div>
+  <button class="btn fab" onclick="go('#/kn')">＋ Compra</button>${nav('#/k')}`;
+  $('#q').oninput = e => { const q = e.target.value.trim().toLowerCase(); document.querySelectorAll('#kl .item').forEach(el => el.style.display = !q || el.dataset.s.includes(q) ? '' : 'none'); };
+}
+let K = null;
+async function viewCompra(id, trabajoId) {
+  const [provs, trs] = await Promise.all([
+    sb.from('tm_proveedores').select('id,nombre').order('nombre').then(chk),
+    sb.from('tm_trabajos').select('id,numero,fecha,titulo,tm_vehiculos(patente,tm_clientes(nombre))').order('numero', { ascending: false }).limit(60).then(chk)
+  ]);
+  if (id) {
+    const k = await sb.from('tm_compras').select('*,tm_proveedores(nombre),tm_compra_items(*)').eq('id', id).single().then(chk);
+    K = { ...k, proveedor_nombre: k.tm_proveedores?.nombre || '', items: (k.tm_compra_items || []).sort((a, b) => a.orden - b.orden).map(i => ({ ...i })) };
+  } else {
+    K = { id: null, fecha: hoy(), proveedor_nombre: '', comprobante: '', medio_pago: 'efectivo', trabajo_id: trabajoId || null, notas: '', items: [{ categoria: 'insumo', descripcion: '', cantidad: 1, costo_unit: 0 }] };
+  }
+  const back = trabajoId ? `#/t/${trabajoId}` : '#/k';
+  setHeader(id ? 'Compra' : 'Nueva compra', back);
+  app().innerHTML = `
+  <div class="card">
+    <div class="row"><div><label>Fecha</label><input id="k_fecha" type="date" value="${esc(K.fecha)}"></div>
+    <div><label>Medio de pago</label><select id="k_medio">${Object.entries(MEDIOS).map(([v, l]) => `<option value="${v}" ${K.medio_pago === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div></div>
+    <label>Proveedor</label><input id="k_prov" list="provs" value="${esc(K.proveedor_nombre)}" placeholder="Elegí uno o escribí uno nuevo">
+    <datalist id="provs">${provs.map(p => `<option value="${esc(p.nombre)}">`).join('')}</datalist>
+    <div class="row"><div><label>N° de ticket / factura</label><input id="k_comp" value="${esc(K.comprobante)}"></div>
+    <div><label>Para el trabajo (opcional)</label><select id="k_trab"><option value="">— General / stock —</option>${trs.map(t => `<option value="${t.id}" ${K.trabajo_id === t.id ? 'selected' : ''}>N° ${pad(t.numero)} · ${esc(t.tm_vehiculos?.tm_clientes?.nombre || '')} · ${esc(t.titulo)}</option>`).join('')}</select></div></div>
+  </div>
+  <div class="card">
+    <b>Qué compraste</b>
+    <div id="kitems" style="margin-top:10px"></div>
+    <div class="btns">
+      <button class="btn sec" type="button" data-kadd="insumo">＋ Insumo</button>
+      <button class="btn sec" type="button" data-kadd="repuesto">＋ Repuesto</button>
+      <button class="btn sec" type="button" data-kadd="herramienta">＋ Herramienta</button>
+    </div>
+    <div class="tot big"><span>Total</span><span id="ktot"></span></div>
+    <label>Notas</label><textarea id="k_notas">${esc(K.notas)}</textarea>
+  </div>
+  <div class="btns"><button class="btn" id="ksave">Guardar compra</button></div>
+  ${id ? '<div class="btns"><button class="btn ghost" id="kdel">Eliminar compra</button></div>' : ''}`;
+  renderKItems();
+  document.querySelectorAll('[data-kadd]').forEach(b => b.onclick = () => {
+    K.items.push({ categoria: b.dataset.kadd, descripcion: '', cantidad: 1, costo_unit: 0 }); renderKItems();
+    const all = document.querySelectorAll('#kitems .it'); all[all.length - 1]?.querySelector('[data-k=descripcion]')?.focus();
+  });
+  $('#ksave').onclick = async () => {
+    const items = K.items.filter(i => String(i.descripcion || '').trim());
+    if (!items.length) { toast('Cargá al menos un artículo'); return; }
+    const btn = $('#ksave'); btn.disabled = true;
+    try {
+      let proveedor_id = null; const pn = $('#k_prov').value.trim();
+      if (pn) {
+        const ex = provs.find(p => p.nombre.toLowerCase() === pn.toLowerCase());
+        proveedor_id = ex ? ex.id : (await sb.from('tm_proveedores').insert({ nombre: pn }).select('id').single().then(chk)).id;
+      }
+      const row = { fecha: $('#k_fecha').value || hoy(), medio_pago: $('#k_medio').value, proveedor_id, comprobante: $('#k_comp').value.trim() || null, trabajo_id: $('#k_trab').value || null, notas: $('#k_notas').value.trim() || null };
+      if (K.id) await sb.from('tm_compras').update(row).eq('id', K.id).then(chk);
+      else K.id = (await sb.from('tm_compras').insert(row).select('id').single().then(chk)).id;
+      await sb.from('tm_compra_items').delete().eq('compra_id', K.id).then(chk);
+      await sb.from('tm_compra_items').insert(items.map((i, k) => ({ compra_id: K.id, orden: k, categoria: i.categoria, descripcion: String(i.descripcion).trim(), cantidad: n(i.cantidad) || 1, costo_unit: n(i.costo_unit) }))).then(chk);
+      toast('Compra guardada'); go(row.trabajo_id && trabajoId ? '#/t/' + row.trabajo_id : '#/k');
+    } catch (e) { fail(e); } finally { btn.disabled = false; }
+  };
+  if (id) $('#kdel').onclick = async () => {
+    if (!confirm('¿Eliminar esta compra?')) return;
+    try { await sb.from('tm_compras').delete().eq('id', K.id).then(chk); toast('Compra eliminada'); go('#/k'); } catch (e) { fail(e); }
+  };
+}
+function renderKItems() {
+  const cls = { repuesto: 'rep', insumo: 'ins', herramienta: 'mo', otro: 'ins' };
+  const box = $('#kitems');
+  box.innerHTML = K.items.map((i, k) => `
+    <div class="it ${cls[i.categoria]}" data-i="${k}">
+      <button class="x" type="button" data-del="${k}" aria-label="Quitar">×</button>
+      <div class="row" style="padding-right:22px">
+        <div style="flex:0 0 150px"><select data-k="categoria" style="font-size:14px;padding:10px 6px">${Object.entries(CATS).map(([v, l]) => `<option value="${v}" ${i.categoria === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+        <div><input data-k="descripcion" value="${esc(i.descripcion)}" placeholder="Ej: Líquido de frenos DOT 4"></div>
+      </div>
+      <div class="g" style="grid-template-columns:1fr 1fr 1fr">
+        <div><label>Cant.</label><input data-k="cantidad" type="number" inputmode="decimal" step="any" value="${esc(i.cantidad)}"></div>
+        <div><label>Costo u.</label><input data-k="costo_unit" type="number" inputmode="decimal" step="any" value="${esc(n(i.costo_unit) || '')}"></div>
+        <div class="sub" style="align-self:end;padding-bottom:10px">Subtotal<br><b data-sub>${money(n(i.cantidad) * n(i.costo_unit))}</b></div>
+      </div>
+    </div>`).join('') || '<div class="empty small">Sin artículos.</div>';
+  const upd = () => { $('#ktot').textContent = money(totCompra(K)); };
+  box.oninput = box.onchange = e => {
+    const el = e.target, it = el.closest('.it'); if (!it || !el.dataset.k) return;
+    const i = K.items[+it.dataset.i]; i[el.dataset.k] = el.value;
+    if (el.dataset.k === 'categoria') it.className = 'it ' + cls[i.categoria];
+    it.querySelector('[data-sub]').textContent = money(n(i.cantidad) * n(i.costo_unit)); upd();
+  };
+  box.onclick = e => { const d = e.target.closest('[data-del]'); if (!d) return; K.items.splice(+d.dataset.del, 1); renderKItems(); };
+  upd();
+}
+
+// ===== Proveedores =====
+async function viewProveedores() {
+  setHeader('Proveedores', null, GEAR);
+  const ps = await sb.from('tm_proveedores').select('id,nombre,telefono,rubro,tm_compras(fecha,tm_compra_items(cantidad,costo_unit))').order('nombre').then(chk);
+  app().innerHTML = `
+  <input id="q" type="search" placeholder="Buscar proveedor o rubro…" autocomplete="off">
+  <h2>Proveedores (${ps.length})</h2>
+  <div class="list" id="pl">${ps.map(p => {
+    const ks = p.tm_compras || []; const tot = ks.reduce((s, k) => s + totCompra(k), 0);
+    const ult = ks.map(k => k.fecha).sort().pop();
+    return `<a class="item" href="#/p/${p.id}" data-s="${esc([p.nombre, p.rubro, p.telefono].join(' ').toLowerCase())}"><div class="grow"><div class="t">${esc(p.nombre)}</div><div class="s">${esc(p.rubro || '')}${p.rubro && ks.length ? ' · ' : ''}${ks.length ? ks.length + ' compra' + (ks.length > 1 ? 's' : '') + (ult ? ' · últ. ' + fecha(ult) : '') : ''}</div></div><div class="r"><b>${money(tot)}</b></div></a>`;
+  }).join('') || '<div class="empty">Todavía no cargaste proveedores. También se crean solos al cargar una compra.</div>'}</div>
+  <button class="btn fab" onclick="go('#/pn')">＋ Proveedor</button>${nav('#/p')}`;
+  $('#q').oninput = e => { const q = e.target.value.trim().toLowerCase(); document.querySelectorAll('#pl .item').forEach(el => el.style.display = !q || el.dataset.s.includes(q) ? '' : 'none'); };
+}
+async function viewProveedor(id) {
+  const p = await sb.from('tm_proveedores').select('*,tm_compras(id,fecha,comprobante,tm_compra_items(categoria,descripcion,cantidad,costo_unit))').eq('id', id).single().then(chk);
+  setHeader(p.nombre, '#/p', `<button class="act" aria-label="Editar" onclick="go('#/pe/${p.id}')">✎</button>`);
+  const ks = (p.tm_compras || []).sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
+  const wa = waPhone(p.telefono);
+  app().innerHTML = `
+  <div class="card">
+    <dl class="kv">
+      ${p.rubro ? `<dt>Rubro</dt><dd>${esc(p.rubro)}</dd>` : ''}
+      ${p.telefono ? `<dt>Teléfono</dt><dd>${esc(p.telefono)}</dd>` : ''}
+      ${p.direccion ? `<dt>Dirección</dt><dd>${esc(p.direccion)}</dd>` : ''}
+      ${p.notas ? `<dt>Notas</dt><dd>${esc(p.notas)}</dd>` : ''}
+      <dt>Total comprado</dt><dd><b>${money(ks.reduce((s, k) => s + totCompra(k), 0))}</b></dd>
+    </dl>
+    <div class="btns">${wa ? `<a class="btn wa" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${p.telefono ? `<a class="btn sec" href="tel:${esc(p.telefono)}">Llamar</a>` : ''}</div>
+  </div>
+  <h2>Compras (${ks.length})</h2>
+  <div class="list">${ks.map(k => `<a class="item" href="#/k/${k.id}"><div class="grow"><div class="t">${fecha(k.fecha)}${k.comprobante ? ' · ' + esc(k.comprobante) : ''}</div><div class="s">${esc((k.tm_compra_items || []).map(i => i.descripcion).join(', '))}</div></div><div class="r"><b>${money(totCompra(k))}</b></div></a>`).join('') || '<div class="empty">Sin compras.</div>'}</div>`;
+}
+async function viewProveedorForm(id) {
+  const p = id ? await sb.from('tm_proveedores').select('*').eq('id', id).single().then(chk) : {};
+  setHeader(id ? 'Editar proveedor' : 'Nuevo proveedor', id ? `#/p/${id}` : '#/p');
+  app().innerHTML = `
+  <form class="card" id="f">
+    <label>Nombre *</label><input name="nombre" required value="${esc(p.nombre)}">
+    <div class="row"><div><label>Teléfono / WhatsApp</label><input name="telefono" type="tel" value="${esc(p.telefono)}"></div>
+    <div><label>Rubro</label><input name="rubro" value="${esc(p.rubro)}" placeholder="Repuestos, lubricentro, herramientas…"></div></div>
+    <label>Dirección</label><input name="direccion" value="${esc(p.direccion)}">
+    <label>Notas</label><textarea name="notas" placeholder="Horarios, descuentos, contacto…">${esc(p.notas)}</textarea>
+    <div class="btns"><button class="btn" type="submit">Guardar</button>${id ? '<button class="btn ghost" type="button" id="del">Eliminar</button>' : ''}</div>
+  </form>`;
+  $('#f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target;
+    const row = { nombre: f.nombre.value.trim(), telefono: f.telefono.value.trim() || null, rubro: f.rubro.value.trim() || null, direccion: f.direccion.value.trim() || null, notas: f.notas.value.trim() || null };
+    try {
+      const r = id ? await sb.from('tm_proveedores').update(row).eq('id', id).select('id').single().then(chk) : await sb.from('tm_proveedores').insert(row).select('id').single().then(chk);
+      toast('Proveedor guardado'); go('#/p/' + r.id);
+    } catch (e) { fail(e.code === '23505' ? { message: 'Ya existe un proveedor con ese nombre' } : e); }
+  };
+  if (id) $('#del').onclick = async () => {
+    if (!confirm('¿Eliminar este proveedor? Sus compras quedan registradas "sin proveedor".')) return;
+    try { await sb.from('tm_proveedores').delete().eq('id', id).then(chk); toast('Proveedor eliminado'); go('#/p'); } catch (e) { fail(e); }
+  };
+}
+
+// ===== Configuración =====
+function viewConfig() {
+  setHeader('Configuración', '#/');
+  app().innerHTML = `
+  <form class="card" id="f">
+    <label>Nombre del negocio</label><input name="negocio" value="${esc(CFG.negocio)}">
+    <label>Teléfono / WhatsApp (sale en el PDF)</label><input name="telefono" value="${esc(CFG.telefono)}">
+    <label>Garantía (sale en el PDF; vacío = no se muestra)</label><textarea name="garantia" placeholder="Ej: 30 días o 1.000 km sobre la mano de obra.">${esc(CFG.garantia)}</textarea>
+    <label>Pie del PDF</label><input name="pie" value="${esc(CFG.pie)}">
+    <div class="btns"><button class="btn" type="submit">Guardar</button></div>
+  </form>
+  <div class="card small muted">Para instalarla en el celu: menú de Chrome → <b>Agregar a pantalla principal</b>.</div>
+  <div class="btns"><button class="btn ghost" id="lo">Cerrar sesión</button></div>`;
+  $('#f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target;
+    const row = { negocio: f.negocio.value.trim() || 'Tu Taller Móvil', telefono: f.telefono.value.trim() || null, garantia: f.garantia.value.trim() || null, pie: f.pie.value.trim() || null, updated_at: new Date().toISOString() };
+    try { CFG = await sb.from('tm_config').update(row).eq('id', 1).select('*').single().then(chk); toast('Configuración guardada'); } catch (e) { fail(e); }
+  };
+  $('#lo').onclick = async () => { await sb.auth.signOut(); ADMIN_OK = false; location.hash = ''; route(); };
+}
+
+// ===== Portal del cliente =====
+async function viewPortal(token) {
+  setHeader('TU TALLER MÓVIL');
+  const { data, error } = await sb.rpc('tm_portal', { p_token: token });
+  if (error || !data) { app().innerHTML = `<div class="card"><p><b>Este link no es válido o ya no está activo.</b></p><p class="muted">Pedile uno nuevo a tu mecánico.</p></div>`; return; }
+  const cfg = data.config || {}, v = data.vehiculo || {};
+  if (cfg.negocio) setHeader(String(cfg.negocio).toUpperCase());
+  const lab = e => ['realizado', 'cobrado'].includes(e) ? 'Realizado' : ESTADOS[e];
+  const cls = e => ['realizado', 'cobrado'].includes(e) ? 'cobrado' : e;
+  const wa = waPhone(cfg.telefono);
+  app().innerHTML = `
+  <div class="card">
+    <div class="muted small">Hola, ${esc(data.cliente)}</div>
+    <div style="font-size:20px;font-weight:800;margin-top:2px">${esc(vehTxt(v))}</div>
+    ${v.patente ? `<div class="muted">Patente <b>${esc(v.patente)}</b></div>` : ''}
+  </div>
+  <h2>Historial de servicios</h2>
+  ${(data.trabajos || []).map((t, k) => { const T = totales(t); return `
+    <details class="tr">
+      <summary><div class="grow" style="flex:1;min-width:0"><div class="t" style="font-weight:600">${esc(t.titulo)}</div><div class="s muted small">${fecha(t.fecha)}${t.km ? ' · ' + kmf(t.km) : ''}</div></div><div class="r" style="text-align:right"><span class="chip e-${cls(t.estado)}">${esc(lab(t.estado))}</span><div><b>${money(T.total)}</b></div></div></summary>
+      <div class="body">
+        ${t.descripcion ? `<p class="small">${esc(t.descripcion)}</p>` : ''}
+        <table class="mini">${(t.items || []).map(i => `<tr><td>${esc(i.descripcion)}${n(i.cantidad) !== 1 ? ` <span class="muted">x${n(i.cantidad)}</span>` : ''}</td><td class="n">${money(n(i.cantidad) * n(i.precio_unit))}</td></tr>`).join('')}
+        ${T.desc ? `<tr><td>Descuento</td><td class="n">− ${money(T.desc)}</td></tr>` : ''}<tr><td><b>Total</b></td><td class="n"><b>${money(T.total)}</b></td></tr></table>
+        ${t.proximo_km || t.proximo_fecha || t.proximo_texto ? `<p class="small"><b>Próximo control:</b> ${[t.proximo_km ? kmf(t.proximo_km) : '', t.proximo_fecha ? fecha(t.proximo_fecha) : ''].filter(Boolean).join(' o ')}${(t.proximo_km || t.proximo_fecha) && t.proximo_texto ? '. ' : ''}${esc(t.proximo_texto || '')}</p>` : ''}
+        ${t.observaciones ? `<p class="small muted">${esc(t.observaciones)}</p>` : ''}
+        <div class="btns"><button class="btn sec" data-pdf="${k}">Descargar PDF</button></div>
+      </div>
+    </details>`; }).join('') || '<div class="empty">Todavía no hay servicios registrados.</div>'}
+  ${wa ? `<div class="btns"><a class="btn wa" href="https://wa.me/${wa}?text=${encodeURIComponent('Hola! Quería consultar por un service para mi ' + vehTxt(v))}" target="_blank" rel="noopener">Pedir un turno por WhatsApp</a></div>` : ''}`;
+  app().onclick = e => {
+    const b = e.target.closest('[data-pdf]'); if (!b) return;
+    const t = data.trabajos[+b.dataset.pdf];
+    const d = { config: cfg, cliente: { nombre: data.cliente }, vehiculo: v, trabajo: t };
+    buildPDF(d).save(nombrePDF(d));
+  };
+}
+
+route();
+</script>
+</body>
+</html>
