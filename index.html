@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Tu Taller Móvil</title>
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#14161A">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -19,11 +19,13 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--fondo);color:var(--negro);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
 a{color:var(--azul);text-decoration:none}
-header#top{position:sticky;top:0;z-index:10;background:var(--negro);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--azul);box-shadow:0 2px 0 var(--rojo)}
-header#top .back{color:#fff;font-size:22px;line-height:1;padding:4px 8px 4px 0;background:none;border:0;cursor:pointer}
+header#top{position:sticky;top:0;z-index:10;background:#fff;color:var(--negro);min-height:58px;padding:calc(8px + env(safe-area-inset-top)) 16px 8px;display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--azul);box-shadow:0 2px 0 var(--rojo)}
+header#top .back{color:var(--negro);font-size:22px;line-height:1;padding:4px 8px 4px 0;background:none;border:0;cursor:pointer}
 header#top h1{font-size:17px;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 header#top .brand{font-weight:800;letter-spacing:.04em}
-header#top .act{color:#fff;background:none;border:0;font-size:20px;cursor:pointer;padding:4px}
+header#top .logo{height:46px;width:auto;display:block}
+header#top .lw{flex:1;display:flex;align-items:center;min-width:0}
+header#top .act{color:var(--gris);background:none;border:0;font-size:20px;cursor:pointer;padding:4px}
 main{max-width:760px;margin:0 auto;padding:14px 16px 150px}
 .nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--gris-2);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:8}
 .nav a{flex:1;text-align:center;padding:7px 0 9px;font-size:12px;color:var(--gris);font-weight:600}
@@ -82,7 +84,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--azul);border-col
 .kv dt{color:var(--gris)} .kv dd{margin:0}
 .login{max-width:360px;margin:8vh auto 0}
 .login .logo{text-align:center;margin-bottom:18px}
-.login .logo b{display:block;font-size:24px;letter-spacing:.05em}
+.login .logo img{width:100%;max-width:280px;height:auto;display:block;margin:0 auto 8px}
 details.tr{background:var(--card);border-radius:var(--radio);margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
 details.tr summary{list-style:none;padding:12px 14px;cursor:pointer;display:flex;gap:10px;align-items:center}
 details.tr summary::-webkit-details-marker{display:none}
@@ -96,7 +98,7 @@ table.mini td.n{text-align:right;white-space:nowrap;padding-left:8px}
 </style>
 </head>
 <body>
-<header id="top"><h1 class="brand">TU TALLER MÓVIL</h1></header>
+<header id="top"><div class="lw"><img class="logo" src="logo-horizontal.svg" alt="Tu Taller Móvil"></div></header>
 <main id="app"><div class="empty">Cargando…</div></main>
 <div id="toast"></div>
 
@@ -117,6 +119,8 @@ const MEDIOS = { efectivo: 'Efectivo', transferencia: 'Transferencia', mercado_p
 const SERVICIOS = ['Cambio de aceite y filtro', 'Cambio de aceite, filtro de aceite y filtro de aire', 'Limpieza de inyectores', 'Service de inyección completo', 'Cambio de pastillas de freno delanteras', 'Cambio de pastillas de freno traseras', 'Cambio de bujías', 'Diagnóstico'];
 let CFG = { negocio: 'Tu Taller Móvil', telefono: '', garantia: '', pie: 'Documento no válido como factura.' };
 let ADMIN_OK = false;
+let LOGO_PNG = null;
+const logoReady = fetch('logo-horizontal.png').then(r => r.ok ? r.blob() : null).then(b => b && new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => res(null); fr.readAsDataURL(b); })).then(d => { LOGO_PNG = d || null; }).catch(() => { });
 
 // ===== Helpers =====
 const $ = s => document.querySelector(s);
@@ -165,7 +169,7 @@ function nav(active) {
 const totCompra = k => (k.tm_compra_items || k.items || []).reduce((s, i) => s + n(i.cantidad) * n(i.costo_unit), 0);
 function setHeader(title, back, extra = '') {
   $('#top').innerHTML = (back != null ? `<button class="back" aria-label="Volver" onclick="go('${back}')">‹</button>` : '') +
-    `<h1 class="${back == null ? 'brand' : ''}">${esc(title)}</h1>` + extra;
+    (title == null ? `<div class="lw"><img class="logo" src="logo-horizontal.svg" alt="Tu Taller Móvil"></div>` : `<h1>${esc(title)}</h1>`) + extra;
 }
 
 // ===== Router =====
@@ -208,10 +212,10 @@ window.addEventListener('hashchange', route);
 
 // ===== Login =====
 function viewLogin() {
-  setHeader('TU TALLER MÓVIL');
+  setHeader(null);
   app().innerHTML = `
   <div class="login card">
-    <div class="logo"><b>TU TALLER MÓVIL</b><span class="muted small">Gestión de clientes y trabajos</span></div>
+    <div class="logo"><img src="logo-horizontal.svg" alt="Tu Taller Móvil"><span class="muted small">Gestión de clientes y trabajos</span></div>
     <form id="f">
       <label>Email</label><input name="email" type="email" autocomplete="username" required>
       <label>Contraseña</label><input name="pass" type="password" autocomplete="current-password" required>
@@ -228,14 +232,14 @@ function viewLogin() {
   };
 }
 function viewNoAccess(session) {
-  setHeader('TU TALLER MÓVIL');
+  setHeader(null);
   app().innerHTML = `<div class="card"><p>El usuario <b>${esc(session.user.email)}</b> no tiene acceso a esta app.</p><div class="btns"><button class="btn sec" id="lo">Cerrar sesión</button></div></div>`;
   $('#lo').onclick = async () => { await sb.auth.signOut(); route(); };
 }
 
 // ===== Inicio =====
 async function viewHome() {
-  setHeader('TU TALLER MÓVIL', null, GEAR);
+  setHeader(null, null, GEAR);
   const [cl, tr] = await Promise.all([
     sb.from('tm_clientes').select('id,nombre,telefono,zona,tm_vehiculos(id,marca,modelo,patente)').order('nombre').then(chk),
     sb.from('tm_trabajos').select('id,numero,fecha,titulo,estado,descuento,tm_items(tipo,cantidad,precio_unit,costo_unit),tm_vehiculos(marca,modelo,patente,tm_clientes(nombre))').order('fecha', { ascending: false }).order('numero', { ascending: false }).limit(300).then(chk)
@@ -455,7 +459,7 @@ async function viewTrabajo(id, vehId) {
   });
   $('#save').onclick = async () => { if (await guardarTrabajo()) toast('Trabajo guardado'); };
   $('#share').onclick = async () => { if (await guardarTrabajo()) compartirPDF(datosPDF()); };
-  $('#dl').onclick = async () => { if (await guardarTrabajo()) { const d = datosPDF(); buildPDF(d).save(nombrePDF(d)); } };
+  $('#dl').onclick = async () => { if (await guardarTrabajo()) { await logoReady; const d = datosPDF(); buildPDF(d).save(nombrePDF(d)); } };
   if (id) $('#del').onclick = async () => {
     if (!confirm('¿Eliminar este trabajo? No se puede deshacer.')) return;
     try { await sb.from('tm_trabajos').delete().eq('id', T.id).then(chk); toast('Trabajo eliminado'); go('#/v/' + veh.id); } catch (e) { fail(e); }
@@ -560,14 +564,22 @@ function buildPDF(d) {
   const ensure = h => { if (y + h > H - 16) { doc.addPage(); y = 14; } };
 
   // Encabezado
-  doc.setFillColor(...NE); doc.rect(0, 0, W, 24, 'F');
+  if (LOGO_PNG) {
+    doc.addImage(LOGO_PNG, 'PNG', M, 4.5, 42.9, 18);
+    if (cfg.telefono) {
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...GR); doc.text('WhatsApp', W - M, 11.5, { align: 'right' });
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(...NE); doc.text(cfg.telefono, W - M, 16.5, { align: 'right' });
+    }
+  } else {
+    doc.setFillColor(...NE); doc.rect(0, 0, W, 24, 'F');
+    doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
+    doc.text(String(cfg.negocio || 'Tu Taller Móvil').toUpperCase(), M, 12);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(190, 196, 206);
+    doc.text('Mantenimiento automotor a domicilio', M, 18);
+    if (cfg.telefono) { doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.text('WhatsApp ' + cfg.telefono, W - M, 12, { align: 'right' }); }
+  }
   doc.setFillColor(...AZ); doc.rect(0, 24, W, 1.6, 'F');
   doc.setFillColor(...RO); doc.rect(0, 25.6, W, 0.9, 'F');
-  doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
-  doc.text(String(cfg.negocio || 'Tu Taller Móvil').toUpperCase(), M, 12);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(190, 196, 206);
-  doc.text('Mantenimiento automotor a domicilio', M, 18);
-  if (cfg.telefono) { doc.setTextColor(255, 255, 255); doc.setFontSize(9); doc.text('WhatsApp ' + cfg.telefono, W - M, 12, { align: 'right' }); }
 
   // Tipo de documento
   y = 36;
@@ -660,6 +672,7 @@ function buildPDF(d) {
 }
 async function compartirPDF(d) {
   const t = d.trabajo, v = d.vehiculo, c = d.cliente, real = ['realizado', 'cobrado'].includes(t.estado);
+  await logoReady;
   const name = nombrePDF(d), doc = buildPDF(d);
   const file = new File([doc.output('blob')], name, { type: 'application/pdf' });
   const texto = `Hola ${c.nombre}! Te paso el ${real ? 'detalle del trabajo realizado' : 'presupuesto'} de tu ${vehTxt(v)}${v.patente ? ' (' + v.patente + ')' : ''}. Total: ${money(totales(t).total)}. Cualquier consulta, escribime. ${CFG.negocio || ''}`;
@@ -884,11 +897,10 @@ function viewConfig() {
 
 // ===== Portal del cliente =====
 async function viewPortal(token) {
-  setHeader('TU TALLER MÓVIL');
+  setHeader(null);
   const { data, error } = await sb.rpc('tm_portal', { p_token: token });
   if (error || !data) { app().innerHTML = `<div class="card"><p><b>Este link no es válido o ya no está activo.</b></p><p class="muted">Pedile uno nuevo a tu mecánico.</p></div>`; return; }
   const cfg = data.config || {}, v = data.vehiculo || {};
-  if (cfg.negocio) setHeader(String(cfg.negocio).toUpperCase());
   const lab = e => ['realizado', 'cobrado'].includes(e) ? 'Realizado' : ESTADOS[e];
   const cls = e => ['realizado', 'cobrado'].includes(e) ? 'cobrado' : e;
   const wa = waPhone(cfg.telefono);
@@ -912,8 +924,9 @@ async function viewPortal(token) {
       </div>
     </details>`; }).join('') || '<div class="empty">Todavía no hay servicios registrados.</div>'}
   ${wa ? `<div class="btns"><a class="btn wa" href="https://wa.me/${wa}?text=${encodeURIComponent('Hola! Quería consultar por un service para mi ' + vehTxt(v))}" target="_blank" rel="noopener">Pedir un turno por WhatsApp</a></div>` : ''}`;
-  app().onclick = e => {
+  app().onclick = async e => {
     const b = e.target.closest('[data-pdf]'); if (!b) return;
+    await logoReady;
     const t = data.trabajos[+b.dataset.pdf];
     const d = { config: cfg, cliente: { nombre: data.cliente }, vehiculo: v, trabajo: t };
     buildPDF(d).save(nombrePDF(d));
